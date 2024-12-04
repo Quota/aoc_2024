@@ -37,15 +37,15 @@
 (defn parse-command
   "Returns a map with the command and arguments, if any.
   The :cmd can be :mul (with seq of numbers as :args)
-  and and :do (with a boolean in :args)."
+  and :do (with a boolean in :args)."
   [[cmd arg1 arg2]]
-  (cond
-    (.startsWith cmd "mul")
-    {:cmd :mul :args [(parse-long arg1) (parse-long arg2)]}
-    (= "do()" cmd)
+  (case cmd
+    "do()"
     {:cmd :do :args true}
-    (= "don't()" cmd)
-    {:cmd :do :args false}))
+    "don't()"
+    {:cmd :do :args false}
+    ; else "mul(...)"
+    {:cmd :mul :args [(parse-long arg1) (parse-long arg2)]}))
 
 (defn collect-commands
   "Filters the commands regarding :do and :dont's
