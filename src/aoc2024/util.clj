@@ -1,5 +1,5 @@
 (ns aoc2024.util
-  (:require [clojure.string :as s])
+  (:require [clojure.string :as str])
   (:require [clojure.java.io :as io])
   (:require [clj-http.client :as client])
   (:import [java.io IOException]))
@@ -7,9 +7,14 @@
 ;;; parsing numbers
 
 (defn parse-numbers
-  "Input: \"n...n\" or (\"n...n...\" \"...\") ; string (or list with strings) of longs
-  Output: ((n n ...) ...) ; list (or list of list) of numbers
-  Argument `sep` is the regex to use to split numbers within strings, default is spaces (one or more)"
+  "Parses a string of longs (or a list of strings of numbers, i.e. you
+  can omit the `map` call).
+  Input: \"n n ...\" or (\"n n ...\" \"...\") ; string (or seq of) of longs
+  Output: (n n ...) or ((n ...) ...) ; list (or list of lists) of longs
+  Argument `sep` is the regex to use to split numbers within strings,
+  default is spaces (one or more).
+  Argument `opts` is vector with options:
+  - :vec -> produce vectors instead of lists"
   ([in]
    (parse-numbers #" +" in))
   ([what in]
@@ -20,7 +25,7 @@
    (if (coll? in)
      (let [map-fn (if (some #{:vec} opts) mapv map)]
        (->> in
-            (map #(clojure.string/split % sep))
+            (map #(str/split % sep))
             (map-fn (fn[x] (map-fn #(parse-long %) x)))))
      (first (parse-numbers sep opts (hash-set in))))))
 
