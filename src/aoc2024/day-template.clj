@@ -8,7 +8,7 @@
 (defn parse-input
   "Returns input as seq of lines."
   []
-  (->> (util/get-input 1)
+  (->> (util/get-input *ns*)
        (str/split-lines)))
 
 ;; part 1

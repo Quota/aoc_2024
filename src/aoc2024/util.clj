@@ -58,8 +58,14 @@
     (.exists (io/file *session-cookie-global*)) (slurp *session-cookie-global*)
     (.exists (io/file *session-cookie-local*)) (slurp *session-cookie-local*)))
 
-(defn get-input
-  [day]
+(defmulti get-input
+  "Returns the input for the given day. Pass either a long for the day
+  or a namespace object which ends in the day-number (will be extracted).
+  Example using long: (get-input 5)
+  Example in namespace `aoc.day05`: (get-input *ns*)"
+  class)
+
+(defmethod get-input java.lang.Long [day]
   (io/make-parents "var/dummy") ; ignore return of make-parents
   (let [filename (str "var/in-" day ".txt")]
     (when-not (-> filename io/file .exists)
@@ -74,6 +80,8 @@
         (throw (IllegalStateException. (str "Cannot http/get input: Missing session string (" *session-cookie-global* " or " *session-cookie-local* ")")))))
     (slurp filename)))
 
+(defmethod get-input clojure.lang.Namespace [ns]
+  (get-input (parse-long (#(subs % (- (count %) 2)) (str ns)))))
 
 ;;; collections functions
 

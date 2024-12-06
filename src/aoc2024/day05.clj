@@ -10,7 +10,7 @@
   "Returns input as map with a :rules map (page -> page-set)
   and a :updates seq (of page-vecs)."
   []
-  (let [[rules _ updates] (->> (util/get-input 5)
+  (let [[rules _ updates] (->> (util/get-input *ns*)
                                str/split-lines
                                (partition-by empty?))
         rules (->> rules
@@ -66,4 +66,4 @@
         (map #(repair-update rules %))
         (map get-center-element))
       +
-      updates))
+      updates)))
