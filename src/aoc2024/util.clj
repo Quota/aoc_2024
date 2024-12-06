@@ -69,13 +69,22 @@
         (throw (IllegalStateException. (str "Cannot http/get input: Missing session string (" *session-cookie-global* " or " *session-cookie-local* ")")))))
     (slurp filename)))
 
-(comment
-  (try
-    (slurp "in/foo")
-    (catch Exception ex (str ex)))
 
-  (get-input 1)
-)
+;;; collections functions
+
+(defn conj-vec
+  "Like `conj` but creates a vector if coll is nil."
+  [coll x]
+  (if coll
+    (conj coll x)
+    [x]))
+
+(defn conj-set
+  "Like `conj` but creates a set if coll is nil."
+  [coll x]
+  (if coll
+    (conj coll x)
+    #{x}))
 
 ;;; math functions
 
