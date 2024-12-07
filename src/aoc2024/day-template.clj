@@ -3,7 +3,7 @@
     [clojure.string :as str]
     [aoc2024.util :as util]))
 
-;;; day 1: template
+;;; day template
 
 (defn parse-input
   "Returns input as seq of lines."

@@ -4,7 +4,7 @@
     [clojure.math.combinatorics :as combo]
     [aoc2024.util :as util]))
 
-;;; day 1: Print Queue
+;;; day 5: Print Queue
 
 (defn parse-input
   "Returns input as map with a :rules map (page -> page-set)

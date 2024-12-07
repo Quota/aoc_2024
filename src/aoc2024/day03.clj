@@ -3,7 +3,7 @@
     [clojure.string :as str]
     [aoc2024.util :as util]))
 
-;;; day 1: Mull It Over
+;;; day 3: Mull It Over
 
 (defn parse-input
   "Returns the single-line input as a long string."
