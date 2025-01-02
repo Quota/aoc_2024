@@ -113,3 +113,30 @@
   Note: This method is not tested with negative numbers."
   [a b]
   (/ (Math/abs (* a b)) (gcd a b)))
+
+;;; plotting stuff
+
+(defn plot-maze
+  "Arguments:
+  - [height width]: size of the maze (from 0, incl. to height/width, excl.)
+  - maze: fn [[r c]] to return the to value to be printed at row/col
+  - options map:
+    * `:fmt` fn[v], optional, to format the maze value before printing
+    * `:out` file(name), optional, to print the maze to instead of stdout
+    * `:inv?` optional, to invert the coordinates (e.g. xy instead rc)
+  Returns the maze itself again."
+  [[height width]
+   maze
+   & {:keys [fmt out inv?]
+      :or {fmt (fnil identity \ )}
+      :as opts}]
+  (if out
+    (spit out
+          (with-out-str
+            (plot-maze [height width] maze (dissoc opts :out))))
+    (doseq [r (range height)
+            c (range width)]
+      (if (and (pos? r) (zero? c))
+        (println))
+      (print (fmt (maze (if inv? [c r] [r c]))))))
+  maze)
