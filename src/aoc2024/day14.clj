@@ -6,7 +6,7 @@
 ;;; day 14: Restroom Redoubt
 
 (defn parse-input
-  "Returns input as map:
+  "Returns input as map with robots and the area size:
   {:robots ({:x <n> :y <n> :dx <n> :dy <n>}, ...)
    :width <n>
    :height <n>}."

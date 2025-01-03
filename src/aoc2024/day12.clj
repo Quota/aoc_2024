@@ -33,8 +33,8 @@
       rd)))
 
 (defn parse-input
-  "Returns input as vec of region-data maps.
-  Example: [{:plant <ch> :region #{rc1, rc2, ...}}, ...]"
+  "Returns input as vec of region-data maps:
+  [{:plant <ch> :region #{<rc1>, <rc2>, ...}}, ...]"
   []
   (let [m (->> (util/get-input *ns*)
                (str/split-lines)
@@ -56,12 +56,14 @@
 ;; part 1
 
 (defn count-open-sides
+  "Returns the number of open sides at rc in regard to given region."
   [region rc]
   (->> (get-neighbors rc)
        (remove region)
        count))
 
 (defn get-fence-data
+  "Returns area and perimiter of the given region as {:a <n> :p <n>}."
   [region]
   {:a (* (count region))
    :p (->> region

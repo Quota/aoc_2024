@@ -7,7 +7,14 @@
 ;;; day 17: Chronospatial Computer
 
 (defn parse-input
-  "Returns input as seq of lines."
+  "Returns input as map as follows:
+  {:term 1000      ; hard termination counter
+   :ip 0           ; initial instruction pointer
+   :out []         ; initial output vec
+   :a <n>          ; register a according to input
+   :b <n>          ; register b according to input
+   :c <n>          ; register c according to input
+   :prog [<n> ...] ; the program according to input"
   []
   (->> (util/get-input *ns*)
        (str/split-lines)
@@ -23,18 +30,23 @@
           :out []})))
 
 (defn combo
+  "Resolves the given combo operand."
   [{:keys [a b c]} opa]
   (case opa
     4 a, 5 b, 6 c,
     opa))
 
-(def opc->name {0 "adv" 1 "bxl" 2 "bst" 3 "jnz" 4 "bxc" 5 "out" 6 "bdv" 7 "cdv"})
+(def opc->name
+  "Map of op-code to name."
+  {0 "adv" 1 "bxl" 2 "bst" 3 "jnz" 4 "bxc" 5 "out" 6 "bdv" 7 "cdv"})
 
 (defn adv
+  "Performs the 'adv' division and returns the result."
   [data a opa]
   (quot a (int (math/pow 2 (combo data opa)))))
   
 (defn run
+  "Runs the program."
   [{:keys [term ip a b c prog] :as data}]
   (if (zero? term)
     (throw (ex-info "Too many loops" data)))

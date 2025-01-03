@@ -6,26 +6,20 @@
 
 ;;; day 13: Claw Contraption
 
-(defn parse-line
-  [l]
-  (->> l
-       (re-seq #"\d+")
-       (mapv parse-long)))
-
 (defn parse-game-cfg
-  "Returns three lines as [<matrix of l1 and l2> <vector of l3>]."
+  "Returns three lines as [<matrix of l1 and l2> <vector of l3>].
+  Example: [ [[1 2] [3 4]] [5 6] ]"
   [lines]
-  (let [[a c b d v w]
-        (->> lines
-             (apply str)
-             (re-seq #"\d+")
-             (map parse-long))]
+  (let [[a c b d v w] (->> lines
+                           (apply str)
+                           (re-seq #"\d+")
+                           (map parse-long))]
     [[[a b]
       [c d]]
      [v w]]))
 
 (defn parse-input
-  "Returns input as seq of lines."
+  "Returns input as seq of results of `parse-game-cfg`."
   []
   (->> (util/get-input *ns*)
        (str/split-lines)
@@ -34,6 +28,7 @@
        (map parse-game-cfg)))
 
 (defn calc-costs
+  "Returns the number of button presses for all results."
   [results]
   (->> results
        (map (fn[[a b]] (+ (* 3 a) b)))

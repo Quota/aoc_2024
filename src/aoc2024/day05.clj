@@ -7,8 +7,9 @@
 ;;; day 5: Print Queue
 
 (defn parse-input
-  "Returns input as map with a :rules map (page -> page-set)
-  and a :updates seq (of page-vecs)."
+  "Returns input as map of rules and updates:
+  {:rules {<page> #{<page> ...}, ...})
+   :updates ([<page> ...], ...)}"
   []
   (let [[rules _ updates] (->> (util/get-input *ns*)
                                str/split-lines

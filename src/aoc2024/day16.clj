@@ -7,14 +7,15 @@
 ;;; day 16: Reindeer Maze
 
 (defn parse-input
-  "Returns input as seq of lines."
+  "Returns input as vec of vecs of chars."
   []
   (->> (util/get-input *ns*)
        (str/split-lines)
        (mapv vec)))
 
 (defn rotate
-  "Returns the given vec rotated clockwse (:cw) or counterclockwise (:ccw)."
+  "Returns the given vec rotated by 90 degree either clockwise (:cw) or
+  counterclockwise (:ccw)."
   [[x y] dir]
   (case dir
     :cw [y (- x)]
@@ -23,7 +24,8 @@
 (defn get-neighbors
   "Returns a vec with the neighbors of the given node.
   Neighbors are if a step forward is ok (space, start or end)
-  as well if turning clockwise and counterclockwise."
+  as well if turning clockwise and counterclockwise.
+  Used as neighbor-fn in the dijkstra algo."
   [{:keys [maze] :as data} [node-rc diff-rc]]
   (if (= \E (get-in maze node-rc))
     []
@@ -43,6 +45,8 @@
         ))))
 
 (defn calc-costs
+  "Returns the costs to get from curr to nbr.
+  Used as costs-fn in the dijkstra algo."
   [data [curr-rc curr-drc :as curr] [nbr-rc nbr-drc :as nbr]]
   (cond
       (= curr nbr) 0 ; same nodes -> no cost

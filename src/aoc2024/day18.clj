@@ -20,6 +20,8 @@
 ;; part 1
 
 (defn get-neighbors
+  "Returns the neighbors of xy.
+  Used as neighbors-fn in the dijkstra algo."
   [{[xe ye :as end] :end corrupted :corrupted} [x y :as xy]]
   (if (= end xy)
     nil

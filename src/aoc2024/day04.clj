@@ -6,13 +6,14 @@
 ;;; day 4: Ceres Search
 
 (defn parse-input
-  "Returns input as seq of lines."
+  "Returns input as vec of strings."
   []
   (->> (util/get-input 4)
        (str/split-lines)
        (vec)))
 
 (defn letter
+  "Returns the char at r/c in input, or nil if out of bounds."
   [^clojure.lang.PersistentVector input r c]
   (if
     (or (< r 0) (>= r (.size input)) (< c 0))
@@ -37,6 +38,7 @@
     [r c]))
 
 (defn xmas?
+  "Returns if input contains \"XMAS\" at [r c] in the direction [rd cd]."
   [input [r c] [rd cd]]
   (and ;(= \X (letter input r c)) -> dont need to check this again
        (= \M (letter input (+ r rd) (+ c cd)))
@@ -44,6 +46,7 @@
        (= \S (letter input (+ r (* 3 rd)) (+ c (* 3 cd))))))
 
 (defn count-xmas
+  "Returns the number of \"XMAS\" at [r c] in any direction in DIRECTIONS."
   [input [r c :as rc]]
   (if (= \X (letter input r c))
     (->> DIRECTIONS
@@ -80,14 +83,16 @@
    (apply + (map * r1 v))])
 
 (defn rot90
+  "Rotate the given vector by 90 deg."
   [v]
   (*mv [[0 -1][1 0]] v))
 
 (def X-MAS-4-ROTATIONS
+  "Seq with four rotations of `X-MAX`."
   (take 4 (iterate (fn[x] (update-vals x #(map rot90 %))) X-MAS)))
 
 (defn check-x-mas-pattern-at
-  "returns if input at [r c] contains the given x-mas pattern"
+  "Returns if input at [r c] contains the given x-mas pattern"
   [input [r c] x-mas]
   (every? (fn [[l rcs]]
             (every? (fn [[r1 c1]]
@@ -96,7 +101,7 @@
           x-mas))
 
 (defn check-any-x-mas-at
-  "returns if input at `rc` contains x-MAS (any rotation of it)"
+  "Returns if input at rc contains x-MAS (any rotation of it)"
   [input rc]
   (some
     (fn[x-mas] (check-x-mas-pattern-at input rc x-mas))
@@ -111,24 +116,3 @@
          ; around every A check for the 4 rotations of x-MAS
          (filter #(check-any-x-mas-at input %))
          count)))
-
-(comment
-
-  ; alternative idea: coordinate->letter
-  (def x-mas3
-    {[-1 -1] \M, [-1 1] \M,
-     ;[0 0] \A,
-     [1 -1] \S, [1 1] \S
-     })
-
-  (take 5 (iterate rot90 [1 3]))
-
-  (update-keys x-mas3 rot90)
-  (take 2 (iterate #(update-keys % rot90) x-mas3))
-
-  (update-vals X-MAS (partial map rot90))
-  (take 2 (iterate #(update-vals % (partial map rot90)) X-MAS))
-
-  (check-any-x-mas-at input [1 2])
-
-)
